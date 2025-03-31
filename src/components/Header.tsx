@@ -1,17 +1,21 @@
 import {ThemeToggle} from "@/components/ui/custom/ThemeToggle.tsx";
 
-import {Link, useNavigate} from "react-router";
+import {Link, useLocation} from "react-router";
 import {Button} from "@/components/ui/button.tsx";
-
-
+import cn from 'classnames'
+import {motion} from "framer-motion";
 
 export const Header = () => {
+	// const navigate = useNavigate();
 
-	const navigate = useNavigate();
+	const location = useLocation();
+	const isHomePage = location.pathname === "/";
 
 	return (
-		<header
-			className="flex items-center justify-between px-4 py-2 bg-card m-2 rounded-lg  dark:border-none">
+		<motion.header
+			className={cn("bg-card flex items-center justify-between px-4 py-2 m-2 rounded-lg  transition-all duration-300 dark:border-none",{
+				'bg-transparent': isHomePage,
+			})}>
 			<Link to='/' className="flex items-center">
 				<span style={{fontWeight: 900}}>Your</span>
 				<span
@@ -43,6 +47,6 @@ export const Header = () => {
 					<ThemeToggle/>
 				</div>
 			</div>
-		</header>
+		</motion.header>
 	);
 };

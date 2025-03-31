@@ -2,11 +2,14 @@ import {
 	RouterProvider,
 } from "react-router";
 import {router} from "./routes.tsx";
+import {ThemeProvider} from "./ThemeProvider";
 
 
 function App() {
 	return <>
-		<RouterProvider router={router}/>
+		<ThemeProvider>
+			<RouterProvider router={router}/>
+		</ThemeProvider>
 	</>
 }
 
