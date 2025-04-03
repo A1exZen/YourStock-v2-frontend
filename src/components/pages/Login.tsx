@@ -7,20 +7,33 @@ import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 
 import stockImg from '@/assets/stock.jpg'
+import {useLogin} from "@/hooks/useAuth.ts";
 
 
 
 const formSchema = z.object({
-	email: z.string().email("Неверный формат email"),
-	password: z.string().min(6, "Пароль должен содержать минимум 6 символов").max(50, "Пароль не должен превышать 50 символов"),
+	username: z
+		.string()
+		.min(3, "Имя пользователя должно содержать минимум 3 символа")
+		.max(20, "Имя пользователя не должно превышать 20 символов"),
+	password: z
+		.string()
+		.min(6, "Пароль должен содержать минимум 6 символов")
+		.max(50, "Пароль не должен превышать 50 символов"),
 });
-
+type LoginFormValues = z.infer<typeof formSchema>;
 
 export const Login = () => {
-	const form = useForm<z.infer<typeof formSchema>>({
+	const form = useForm<LoginFormValues>({
 		resolver: zodResolver(formSchema),
-		defaultValues: { email: "", password: "" },
+		defaultValues: { username: "", password: "" },
 	});
+
+	const { mutate: login, isPending } = useLogin();
+
+	const onSubmit = (values: LoginFormValues) => {
+		login(values);
+	};
 
 
 	return (
@@ -38,16 +51,17 @@ export const Login = () => {
 						</div>
 						<p className="text-sm sm:text-base mb-10 text-gray-600">Войдите в свой аккаунт c помощью логина и пароля</p>
 						<Form {...form} >
-							<form  className="flex flex-col gap-4">
+							<form onSubmit={form.handleSubmit(onSubmit)}  className="flex flex-col gap-4">
 								<FormField
-									name="email"
+									control={form.control}
+									name="username"
 									render={({ field, fieldState }) => (
 										<FormItem>
-											<FormLabel className="text-sm sm:text-base text-gray-500">Email</FormLabel>
+											<FormLabel className="text-sm sm:text-base text-gray-500">Имя пользователя</FormLabel>
 											<FormControl>
 												<Input
-													type="email"
-													placeholder="example@email.com"
+													type="text"
+													placeholder="username"
 													{...field}
 													className={`w-full border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 ${fieldState.error ? "border-red-500" : ""}`}
 												/>
@@ -75,6 +89,7 @@ export const Login = () => {
 								/>
 								<Button
 									type="submit"
+									disabled={isPending}
 									className="w-full mt-4 bg-teal-800 hover:bg-teal-900 text-white font-medium py-2 rounded-lg transition-colors duration-200"
 								>
 									Авторизация
