@@ -39,13 +39,13 @@ export const Header = () => {
 				{
 					username ? (
 						<>
-							<Button
-								onClick={handleLogout}
-								disabled={isPending}
-								className="bg-red-900 hover:bg-red-700"
-							>
-								{isPending ? "Выход..." : "Выйти"}
-							</Button>
+							{/*<Button*/}
+							{/*	onClick={handleLogout}*/}
+							{/*	disabled={isPending}*/}
+							{/*	className="bg-red-900 hover:bg-red-700"*/}
+							{/*>*/}
+							{/*	{isPending ? "Выход..." : "Выйти"}*/}
+							{/*</Button>*/}
 						</>
 					) : (
 						<div className='flex gap-6'>
