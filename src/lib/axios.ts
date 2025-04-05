@@ -1,5 +1,5 @@
 // src/lib/axios.ts
-import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
+import axios, {AxiosInstance} from "axios";
 import {useAuthStore} from "@/store/useAuthStore.ts";
 
 const api: AxiosInstance = axios.create({
@@ -9,7 +9,7 @@ const api: AxiosInstance = axios.create({
 
 api.interceptors.request.use(
 	(config) => {
-		const accessToken = useAuthStore.getState().accessToken;
+		const {accessToken} = useAuthStore.getState();
 		if (accessToken) {
 			config.headers.Authorization = `Bearer ${accessToken}`;
 		}
@@ -19,18 +19,31 @@ api.interceptors.request.use(
 );
 
 api.interceptors.response.use(
-	(response: AxiosResponse) => {
-		const newAccessToken = response.headers["x-new-access-token"];
-		if (newAccessToken) {
-			useAuthStore.getState().setAccessToken(newAccessToken);
+	(response) => response,
+	async (error) => {
+		const originalRequest = error.config;
+
+		if (error.response?.status === 401 && !originalRequest._retry) {
+			originalRequest._retry = true;
+
+			try {
+				const response = await axios.post(
+					"http://localhost:8080/api/auth/refresh",
+					{},
+					{ withCredentials: true }
+				);
+
+				const newAccessToken = response.data.accessToken;
+				useAuthStore.getState().setAccessToken(newAccessToken);
+				originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+				return api(originalRequest);
+			} catch (refreshError) {
+				useAuthStore.getState().logout();
+				window.location.href = "/login";
+				return Promise.reject(refreshError);
+			}
 		}
-		return response;
-	},
-	async (error: AxiosError) => {
-		if (error.response?.status === 401) {
-			useAuthStore.getState().logout();
-			window.location.href = "/login";
-		}
+
 		return Promise.reject(error);
 	}
 );
