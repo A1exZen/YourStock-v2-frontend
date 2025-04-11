@@ -8,6 +8,7 @@ import {ProtectedRoute} from "@/app/ProtectedRoute.tsx";
 import {Dashboard} from "@/components/pages/dashboard/Dashboard.tsx";
 import Suppliers from "@/components/pages/suppliers/Suppliers.tsx";
 import {Customers} from "@/components/pages/customers/Customers.tsx";
+import Users from "@/components/pages/users/Users.tsx";
 
 
 
@@ -33,13 +34,17 @@ export const router = createBrowserRouter([
 				path: '/register',
 				element: <Register/>
 			},
-			{
+		{
 				path: "/suppliers",
 				element: <ProtectedRoute element={<Suppliers />} allowedRoles={["MANAGER", "ADMIN"]} />,
 			},
 			{
 				path: "/customers",
 				element: <ProtectedRoute element={<Customers />} allowedRoles={["MANAGER", "ADMIN"]} />,
+			},
+			{
+				path: "/users",
+				element: <ProtectedRoute element={<Users />} allowedRoles={["ADMIN"]} />,
 			},
 		]
 	}

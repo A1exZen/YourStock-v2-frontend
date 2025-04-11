@@ -4,15 +4,14 @@ import {
 	deleteSupplier,
 	getSuppliers,
 	updateSupplier
-} from "@/api/supplier";
+} from "@/api/supplierApi";
 import toast from "react-hot-toast";
 import {Supplier} from "@/types/entitiesTypes.ts";
 
 export const useSuppliers = () => {
-	return useQuery({
+	return useQuery<Supplier[], Error>({
 		queryKey: ["suppliers"],
 		queryFn: getSuppliers,
-		onError: (error: Error) => toast.error(error.message),
 		retry: 1,
 	});
 };

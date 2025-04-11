@@ -24,7 +24,7 @@ export const sidebarRoutes: SidebarRoute[] = [
 		permission: ["ADMIN", "MANAGER", "EMPLOYEE"],
 	},
 	{
-		path: "/admin/users",
+		path: "/users",
 		label: "Пользователи",
 		icon: Users,
 		permission: ["ADMIN"],
