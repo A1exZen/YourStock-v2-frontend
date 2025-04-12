@@ -18,7 +18,7 @@ export type Customer = {
 	status: "ACTIVE" | "INACTIVE";
 };
 
-import { UserRole, ReportAction, OrderStatus } from "./enums";
+import { UserRole, ReportAction} from "./enums";
 
 export interface PersonalDetail {
 	id: number;
@@ -54,10 +54,19 @@ export interface Category {
 export interface Material {
 	id: number;
 	name: string;
-	description: string;
+	description?: string;
+	categoryId: number;
+	supplierId: number;
 	price: number;
-	stock: number;
-	createdAt?: string;
+	quantity: number;
+	unit: string;
+}
+export interface MaterialOrder {
+	id: number;
+	material: Material;
+	supplierId: number;
+	quantity: number;
+	status: string;
 }
 
 export interface ProductMaterial {
@@ -72,27 +81,29 @@ export interface Product {
 	name: string;
 	description: string;
 	price: number;
-	stock: number;
-	category: Category;
-	productMaterials: ProductMaterial[];
-	createdAt?: string;
-}
-
-export interface OrderProduct {
-	id: number;
-	orderId: number;
-	product: Product;
 	quantity: number;
+	categoryId: number;
+	unit: string;
+	productMaterials: ProductMaterial[];
 }
 
 export interface Order {
 	id: number;
-	orderDate: string;
-	status: OrderStatus;
-	employee: Employee;
+	createdAt: string;
+	updatedAt: string;
+	customerId: number;
+	employeeId: number;
+	status: string;
+	comment?: string;
 	orderProducts: OrderProduct[];
-	totalCost?: number;
-	createdAt?: string;
+}
+
+export interface OrderProduct {
+	id: number;
+	productId: number;
+	orderId: number;
+	quantity: number;
+	priceAtOrder: number;
 }
 
 export interface Report {
@@ -107,4 +118,11 @@ export interface MaterialRequirement {
 	requiredQuantity: number;
 	availableQuantity: number;
 	isSufficient: boolean;
+}
+
+export interface Category {
+	id: number;
+	name: string;
+	type: "PRODUCT" | "MATERIAL";
+	createdAt?: string;
 }

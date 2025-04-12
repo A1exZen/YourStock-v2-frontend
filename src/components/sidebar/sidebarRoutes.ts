@@ -30,7 +30,7 @@ export const sidebarRoutes: SidebarRoute[] = [
 		permission: ["ADMIN"],
 	},
 	{
-		path: "/admin/categories",
+		path: "/categories",
 		label: "Категории",
 		icon: List,
 		permission: ["ADMIN"],
@@ -39,7 +39,7 @@ export const sidebarRoutes: SidebarRoute[] = [
 		path: "/warehouse",
 		label: "Склад",
 		icon: Package,
-		permission: ["MANAGER", "ADMIN"],
+		permission: ["MANAGER", "ADMIN", "EMPLOYEE"],
 	},
 	{
 		path: "/orders",
